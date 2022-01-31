@@ -1,0 +1,24 @@
+[
+    {
+        "model": "levelupapi.event",
+        "pk": 1,
+        "fields": {
+            "description": "We love birds, let's fly away together",
+            "date": "2022-1-31",
+            "time": "06:00:00.000000",
+            "game_id": 1,
+            "organizer_id": 1
+        }
+    },
+    {
+        "model": "levelupapi.event",
+        "pk": 2,
+        "fields": {
+            "description": "Trains trains trains!!",
+            "date": "2022-2-01",
+            "time": "06:00:00.000000",
+            "game_id": 2,
+            "organizer_id": 1
+        }
+    }
+]
