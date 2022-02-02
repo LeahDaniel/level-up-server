@@ -37,7 +37,7 @@ class GameView(ViewSet):
 
         serializer = GameSerializer(games, many=True)
         return Response(serializer.data)
-    
+
     def create(self, request):
         """Handle POST operations
 
@@ -57,7 +57,7 @@ class GameView(ViewSet):
         )
         serializer = GameSerializer(game)
         return Response(serializer.data)
-    
+
     def update(self, request, pk):
         """Handle PUT requests for a game
 
@@ -76,9 +76,6 @@ class GameView(ViewSet):
         game.save()
 
         return Response(None, status=status.HTTP_204_NO_CONTENT)
-
-
-
 
 
 class GameSerializer(serializers.ModelSerializer):
