@@ -21,7 +21,7 @@ class EventView(ViewSet):
             serializer = EventSerializer(event)
             return Response(serializer.data)
         except Event.DoesNotExist as ex:
-                return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND) 
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
     def list(self, request):
         """Handle GET requests to get all event types
@@ -30,14 +30,14 @@ class EventView(ViewSet):
             Response -- JSON serialized list of event types
         """
         events = Event.objects.all()
-        
+
         game = request.query_params.get('game', None)
         if game is not None:
             events = events.filter(game_id=game)
-        
+
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
-    
+
     def create(self, request):
         """Handle POST operations
 
@@ -56,7 +56,7 @@ class EventView(ViewSet):
         )
         serializer = EventSerializer(event)
         return Response(serializer.data)
-    
+
     def update(self, request, pk):
         """Handle PUT requests for an event
 
