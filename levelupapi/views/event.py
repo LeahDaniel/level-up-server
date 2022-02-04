@@ -1,4 +1,5 @@
 """View module for handling requests about event types"""
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
@@ -49,38 +50,32 @@ class EventView(ViewSet):
         """Handle POST operations
 
         Returns:
-            Response -- JSON serialized game instance
+            Response -- JSON serialized event instance
         """
         gamer = Gamer.objects.get(user=request.auth.user)
-        game = Game.objects.get(pk=request.data["gameId"])
-
-        event = Event.objects.create(
-            description=request.data["description"],
-            date=request.data["date"],
-            time=request.data["time"],
-            game=game,
-            organizer=gamer
-        )
-        serializer = EventSerializer(event)
-        return Response(serializer.data)
+        try:
+            serializer = CreateEventSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(organizer=gamer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except ValidationError as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        """Handle PUT requests for an event
+        """Handle PUT requests for a event
 
         Returns:
             Response -- Empty body with 204 status code
         """
+        try:
+            event = Event.objects.get(pk=pk)
+            serializer = CreateEventSerializer(event, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
+        except ValidationError as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
 
-        event = Event.objects.get(pk=pk)
-        event.description = request.data["description"]
-        event.date = request.data["date"]
-        event.time = request.data["time"]
-
-        game = Game.objects.get(pk=request.data["gameId"])
-        event.game = game
-        event.save()
-
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk):
         """[summary]
@@ -122,5 +117,13 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         depth = 2
         fields = ('id', 'game', 'organizer',
+                  'description', 'date', 'time', 'attendees',
+                  'joined')
+
+
+class CreateEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ('id', 'game',
                   'description', 'date', 'time', 'attendees',
                   'joined')
