@@ -11,3 +11,4 @@ class Game(models.Model):
     maker = models.CharField(max_length=50)
     number_of_players = models.PositiveIntegerField()
     skill_level = models.PositiveIntegerField()
+
