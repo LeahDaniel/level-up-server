@@ -83,6 +83,15 @@ class EventView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk):
+        """[summary]
+
+        Args:
+            request ([type]): [description]
+            pk ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         event = Event.objects.get(pk=pk)
         event.delete()
         return Response(None, status=status.HTTP_204_NO_CONTENT)

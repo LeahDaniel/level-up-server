@@ -7,7 +7,8 @@
             "date": "2022-1-31",
             "time": "06:00:00.000000",
             "game_id": 1,
-            "organizer_id": 1
+            "organizer_id": 1,
+            "attendees": [1, 2]
         }
     },
     {
@@ -18,7 +19,8 @@
             "date": "2022-2-01",
             "time": "06:00:00.000000",
             "game_id": 2,
-            "organizer_id": 1
+            "organizer_id": 1,
+            "attendees": [1, 2]
         }
     }
 ]
